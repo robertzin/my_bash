@@ -12,5 +12,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <term.h>
+# include <ctype.h>
+
+
+char *ft_strjoin(char *s1, char *s2);
+char *ft_substr(char *s, unsigned int start, size_t len);
+int	ft_strlen(char *str);
 
 #endif
