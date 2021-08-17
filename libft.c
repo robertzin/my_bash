@@ -34,6 +34,23 @@ char *ft_substr(char *s, unsigned int start, size_t len)
 	return (str);
 }
 
+char	*ft_strdup(char *s1)
+{
+	size_t	len;
+	char	*str;
+	char	*tmp;
+
+	len = ft_strlen(s1);
+	str = (char *)malloc(sizeof(char) * len + 1);
+	if (str == NULL)
+		return (NULL);
+	tmp = str;
+	while (len--)
+		*str++ = *s1++;
+	*str = '\0';
+	return (tmp);
+}
+
 char *ft_strjoin(char *s1, char *s2)
 {
 	char	*str;

@@ -2,7 +2,7 @@ NAME = minishell
 
 HEADER = minishell.h
 
-USER = yjama#поменять на свой юзернейм
+USER = robert_zin#поменять на свой юзернейм
 
 CC = gcc
 
@@ -24,6 +24,8 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(HEADER)
 	$(CC) -o $(NAME) $(OBJ) $(READLINE_LIB)
+
+re: fclean all
 
 clean:
 	rm -f *.o $(OBJ)
