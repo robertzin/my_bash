@@ -153,3 +153,12 @@ bash-3.2$ echo \ec
 ec
 bash-3.2$ echo \"ec
 "ec
+
+builtins:
+	- echo
+	- cd
+	- pwd
+	- export
+	- unset
+	- env
+	- exit

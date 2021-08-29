@@ -1,155 +1,62 @@
 #include "minishell.h"
 
-int	ft_if_key(char c)
+char	**ft_doublearray_copy(char **array)
 {
-	if (c == '_' || isalnum(c))
-		return (1);
-	return (0);
-}
+	int		i;
+	char	**new;
 
-int	ft_skip_spaces(char *str, int *i)
-{
-	while (isspace(str[*i]))
-		++(*i);
-	return (*i);
-}
-
-char	*ft_gap(char *str, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
-
-	j = *i;
-	while (str[++(*i)])
+	i = 0;
+	if (!array)
+		return (NULL);
+	while (array[i] != NULL)
+		i++;
+	if (!(new = malloc(sizeof(char*) * (i + 1))))
+		return (NULL);
+	i = 0;
+	while (array[i] != NULL)
 	{
-		if (str[*i] == '\'')
-			break ;
+		new[i] = ft_strdup(array[i]);
+		i++;
 	}
-	tmp = ft_substr(str, 0, j);
-	tmp2 = ft_substr(str, j + 1, *i - j - 1);
-	tmp3 = ft_strdup(str + *i + 1);
-	tmp = ft_strjoin(tmp, tmp2);
-	tmp = ft_strjoin(tmp, tmp3);
-	//free(tmp2);
-	//free(tmp3);
-	//free(str);
-	return (tmp);
+	new[i] = NULL;
+	return (new);
 }
 
-char	*ft_slash(char *str, int *i)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_substr(str, 0, *i);
-	tmp2 = ft_strdup(str + *i + 1);
-	tmp = ft_strjoin(tmp, tmp2);
-	//free(tmp2);
-	//free(str);
-	++(*i);
-	return (tmp);
-}
-
-char	*ft_double_gap(char *str, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
-
-	j = *i;
-	while (str[++(*i)])
-	{
-		if (str[*i] == '\\' && (str[*i + 1] == '\"'
-			|| str[*i + 1] == '$' || str[*i + 1] == '\\'))
-			str = ft_slash(str, i);
-		if (str[*i] == '\"')
-			break ;
-	}
-	tmp = ft_substr(str, 0, j);
-	tmp2 = ft_substr(str, j + 1, *i - j - 1);
-	tmp3 = ft_strdup(str + *i + 1);
-	tmp = ft_strjoin(tmp, tmp2);
-	tmp = ft_strjoin(tmp, tmp3);
-	//free(tmp2);
-	//free(tmp3);
-	//free(str);
-	return (tmp);
-}
-
-char	*ft_dollar(char *str, int *i)
-{
-	int		j;
-	char	*tmp;
-	char	*key;
-	char	*env;
-	char	*end;
-
-	j = *i;
-	while (str[++(*i)])
-	{
-		if (!ft_if_key(str[*i]))
-			break ;
-	}
-	if (*i == j + 1)
-		return (str);
-	tmp = ft_substr(str, 0, j);
-	key = ft_substr(str, j + 1, *i - j - 1);
-	ft_skip_spaces(str, i);
-	j = *i;
-	while (str[++(*i)])
-		;
-	end = ft_strdup(str + j);
-	env = getenv(key);
-	if (env)
-		tmp = ft_strjoin(tmp, env);
-	tmp = ft_strjoin(tmp, " ");
-	tmp = ft_strjoin(tmp, end);
-	free(key);
-	// free(env);
-	free(end);
-	return (tmp);
-}
-
-void parser(char *str)
+void	ft_doublearray_print(char **array)
 {
 	int	i;
 
 	i = -1;
-	while (str[++i])
+	while (array[++i])
 	{
-		// if (str[i] == '\'')
-		// 	str = ft_gap(str, &i);
-		// if (str[i] == '\\')
-		// 	str = ft_slash(str, &i);
-		// if (str[i] == '\"')
-		// 	str = ft_double_gap(str, &i);
-		if (str[i] == '$')
-			str = ft_dollar(str, &i);
+		ft_putstr_fd(array[i], 1);
+		ft_putchar_fd('\n', 1);
 	}
-	printf("%s\n", str);
-	free(str);
 }
 
-int main()
+int main(int argc, char **argv, char **envp)
 {
+	t_main	main;
+	t_cmd	cmd;
 	char	*input;
 
-	// input = ft_strdup("input'");
-	// parser(input);
-
+	(void)argc;
+	(void)argv;
+	main.env = ft_doublearray_copy(envp);
 	while (1)
 	{
 		input = readline("minishell$ ");
-		if (!input)
-			break;
-		else
+		// rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		if (input)
 		{
-			add_history(input); //adding the previous input into history
-			parser(input);
+			add_history(input);
+			parser(input, &cmd);
+			ft_exec(&main, &cmd);
 		}
+		else
+			break;
 	}
 	return (0);
 }
