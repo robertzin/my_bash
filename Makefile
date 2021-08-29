@@ -6,8 +6,8 @@ CC = gcc
 
 CFLAGS = -g -Wall -Wextra -Werror -I/usr/local/opt/readline/include
 
-SRC = 	parser.c\
-		utils.c\
+SRC = 	utils.c\
+		parser.c\
 		ft_exec.c\
 		ft_exec_pwd.c\
 		ft_exec_echo.c\
