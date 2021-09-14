@@ -6,13 +6,13 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/28 19:58:37 by yjama             #+#    #+#             */
-/*   Updated: 2021/08/28 19:58:45 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/11 12:57:48 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		*free_str(char **strings)
+void	*free_str(char **strings)
 {
 	int		a;
 
@@ -26,7 +26,7 @@ static void		*free_str(char **strings)
 	return (NULL);
 }
 
-static size_t	delimiter(const char *s, char *set)
+size_t	delimiter(const char *s, char *set)
 {
 	size_t		i;
 	int			b;
@@ -47,7 +47,7 @@ static size_t	delimiter(const char *s, char *set)
 	return (i);
 }
 
-static size_t	string_count(char const *s, char *str)
+size_t	string_count(char const *s, char *str)
 {
 	size_t		a;
 	char		*tmp;
@@ -72,7 +72,7 @@ static size_t	string_count(char const *s, char *str)
 	return (a);
 }
 
-static char		**fill(size_t count, char const *s, char *src, char **str)
+char	**fill(size_t count, char const *s, char *src, char **str)
 {
 	int		a;
 	char	*s1;
@@ -101,7 +101,7 @@ static char		**fill(size_t count, char const *s, char *src, char **str)
 	return (str);
 }
 
-char			**ft_split_upd(char const *s, char *str)
+char	**ft_split_upd(char const *s, char *str)
 {
 	char		**strings;
 	size_t		a;

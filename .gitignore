@@ -1,4 +1,2 @@
-ft_exec_export.c
-ft_exec_cd.c
 *.o
 .gitignore

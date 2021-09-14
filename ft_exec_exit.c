@@ -2,6 +2,7 @@
 
 void	ft_exit_error(char *minishell, char *args, char *error_str)
 {
+	global_error = 1;
 	if (minishell != NULL)
 		ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd("exit: ", 2);
@@ -32,8 +33,7 @@ void	ft_exec_exit(t_cmd *cmd)
 
 	i = 1;
 	j = 0;
-	ft_putstr_fd("exit", 1);
-	ft_putchar_fd('\n', 1);
+	ft_putendl_fd("exit", 1);
 	if (cmd->cmd && cmd->cmd[i] != NULL)
 	{
 		while (cmd->cmd[j] != NULL)

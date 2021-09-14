@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	ft_exec_echo(t_cmd *cmd)
+int	ft_exec_echo(t_cmd *cmd)
 {
 	int	i;
 	int	flag;
@@ -24,4 +24,5 @@ void	ft_exec_echo(t_cmd *cmd)
 	}
 	if (flag == 0)
 		ft_putchar_fd('\n', 1);
+	return (0);
 }

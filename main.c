@@ -1,39 +1,5 @@
 #include "minishell.h"
 
-char	**ft_doublearray_copy(char **array)
-{
-	int		i;
-	char	**new;
-
-	i = 0;
-	if (!array)
-		return (NULL);
-	while (array[i] != NULL)
-		i++;
-	if (!(new = malloc(sizeof(char*) * (i + 1))))
-		return (NULL);
-	i = 0;
-	while (array[i] != NULL)
-	{
-		new[i] = ft_strdup(array[i]);
-		i++;
-	}
-	new[i] = NULL;
-	return (new);
-}
-
-void	ft_doublearray_print(char **array)
-{
-	int	i;
-
-	i = -1;
-	while (array[++i])
-	{
-		ft_putstr_fd(array[i], 1);
-		ft_putchar_fd('\n', 1);
-	}
-}
-
 int main(int argc, char **argv, char **envp)
 {
 	t_main	main;
@@ -42,7 +8,16 @@ int main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	global_error = 0;
+	ft_bzero(&main, sizeof(t_main));
 	main.env = ft_doublearray_copy(envp);
+	ft_shlvl(&main);
+	cmd.cmd = malloc(sizeof(char *) * 3);
+	cmd.cmd[0] = "unset";
+	cmd.cmd[1] = "OLDPWD";
+	cmd.cmd[2] = NULL;
+	ft_exec(&main, &cmd);
+	free(cmd.cmd);
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -52,11 +27,24 @@ int main(int argc, char **argv, char **envp)
 		if (input)
 		{
 			add_history(input);
-			parser(input, &cmd);
-			ft_exec(&main, &cmd);
+			parser(&main, input, &cmd);
+			parser_env(&main);
+			if (cmd.cmd[0] != NULL)
+			{
+				ft_exec(&main, &cmd);
+				free(cmd.cmd);
+			}
 		}
 		else
 			break;
 	}
+	ft_doublearray_free(main.env);
+	free(input);
+	if (main.cmd)
+		ft_doublearray_free(main.cmd->cmd);
+	ft_doublearray_free(main.path);
+	free(main.home);
+	free(main.pwd);
+	free(main.oldpwd);
 	return (0);
 }

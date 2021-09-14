@@ -9,9 +9,13 @@ CFLAGS = -g -Wall -Wextra -Werror -I/usr/local/opt/readline/include
 SRC = 	utils.c\
 		parser.c\
 		ft_exec.c\
+		parser_env.c\
+		ft_exec_cd.c\
 		ft_exec_pwd.c\
 		ft_exec_echo.c\
 		ft_exec_exit.c\
+		ft_exec_unset.c\
+		ft_exec_export.c\
 		main.c\
 
 LIBFT = libft.a
