@@ -40,7 +40,7 @@ char	*ft_goto(t_main *main)
 			}
 			oldpwd = main->env[i];
 			main->env[i] = ft_strjoin("PWD=", buf);
-			if (main->env[i])
+			if (!main->env[i])
 			{
 				global_error = 1;
 				ft_putendl_fd("malloc error\n", 2);
