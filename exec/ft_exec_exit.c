@@ -1,17 +1,5 @@
 #include "minishell.h"
 
-void	ft_exit_error(char *minishell, char *args, char *error_str)
-{
-	global_error = 1;
-	if (minishell != NULL)
-		ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd("exit: ", 2);
-	if (args != NULL)
-		ft_putstr_fd(args, 2);
-	ft_putstr_fd(error_str, 2);
-	ft_putchar_fd('\n', 2);
-}
-
 int	ft_check_arg(char *str)
 {
 	int		i;

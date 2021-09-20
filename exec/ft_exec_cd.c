@@ -1,26 +1,6 @@
 #include "minishell.h"
 
-int	ft_cd_error(char *var, char *str)
-{
-	(void)var;
-	global_error = 1;
-	if (str != NULL)
-	{
-		ft_putstr_fd(str, 2);
-		ft_putchar_fd('\n', 2);
-		return (-1);
-	}
-	else
-	{
-		write(2, "minishell: ", 11);
-		write(2, var, ft_strlen(var));
-		write(2, ": No such file or directory", 26);
-		ft_putchar_fd('\n', 2);
-	}
-	return (-1);
-}
-
-char	*ft_goto(t_main *main)
+char	*ft_goto(t_base *main)
 {
 	int		i;
 	char	*oldpwd;
@@ -28,30 +8,27 @@ char	*ft_goto(t_main *main)
 
 	i = -1;
 	oldpwd = NULL;
-	while (main->env[++i] != NULL)
+	while (main->envc[++i] != NULL)
 	{
-		if (ft_strncmp(main->env[i], "PWD=", 4) == 0)
+		if (ft_strncmp(main->envc[i], "PWD=", 4) == 0)
 		{
 			if (!(getcwd(buf, PATH_MAX)))
 			{
-				global_error = 1;
-				ft_putendl_fd("getcwd error\n", 2);
+				ft_print_error("getcwd error", NULL, 1);
 				return (NULL);
 			}
-			oldpwd = main->env[i];
-			main->env[i] = ft_strjoin("PWD=", buf);
-			if (!main->env[i])
+			oldpwd = main->envc[i];
+			main->envc[i] = ft_strjoin("PWD=", buf);
+			if (!main->envc[i])
 			{
-				global_error = 1;
-				ft_putendl_fd("malloc error\n", 2);
+				ft_print_error("malloc error", NULL, 121);
 				return (NULL);
 			}
 			free(main->pwd);
-			main->pwd = ft_strdup(main->env[i]);
-			if (!main->env[i])
+			main->pwd = ft_strdup(main->envc[i]);
+			if (!main->envc[i])
 			{
-				global_error = 1;
-				ft_putendl_fd("malloc error\n", 2);
+				ft_print_error("malloc error", NULL, 121);
 				return (NULL);
 			}
 			return (oldpwd);
@@ -60,7 +37,7 @@ char	*ft_goto(t_main *main)
 	return (oldpwd);
 }
 
-int	ft_export_oldpwd(t_main *main, char *oldpwd)
+int	ft_export_oldpwd(t_base *main, char *oldpwd)
 {
 	t_cmd	cmd;
 
@@ -70,51 +47,49 @@ int	ft_export_oldpwd(t_main *main, char *oldpwd)
 		cmd.cmd[0] = ft_strdup("export");
 		cmd.cmd[1] = ft_strjoin("OLD", oldpwd);
 		if (!cmd.cmd[1])
-		{
-			global_error = 1;
-			ft_putendl_fd("malloc error\n", 2);
-			return (-1);
-		}
+			return (ft_print_error("malloc error", NULL, 121));
 		cmd.cmd[2] = NULL;
-		ft_exec(main, &cmd);
+		ft_exec_export(main, &cmd);
 		ft_doublearray_free(cmd.cmd);
 	}
 	return (0);
 }
 
-int	ft_set_oldpwd(t_main *main, char *oldpwd)
+int	ft_set_oldpwd(t_base *main, char *oldpwd)
 {
 	int	i;
 	int	flag;
 
 	i = -1;
 	flag = 0;
-	while (main->env[++i] != NULL)
+	while (main->envc[++i] != NULL)
 	{
-		if (ft_strncmp(main->env[i], "OLDPWD=", 7) == 0)
+		if (ft_strncmp(main->envc[i], "OLDPWD=", 7) == 0)
 		{
 			flag = 1;
-			free(main->env[i]);
-			main->env[i] = ft_strjoin("OLD", oldpwd);
-			if (!main->env[i])
-				return (-1);
+			free(main->envc[i]);
+			main->envc[i] = ft_strjoin("OLD", oldpwd);
+			if (!main->envc[i])
+				return (ft_print_error("malloc error", NULL, 121));
 			break ;
 		}
 	}
 	if (flag == 0)
 		ft_export_oldpwd(main, oldpwd);
 	free(main->oldpwd);
-	main->oldpwd = ft_strdup(main->env[i]);
+	main->oldpwd = ft_strdup(main->envc[i]);
+	if (!main->oldpwd)
+		return (ft_print_error("malloc error", NULL, 121));
 	free(oldpwd);
 	return (0);
 }
 
-int	ft_pre_goto(t_main *main, char **oldpwd, int flag)
+int	ft_pre_goto(t_base *main, char **oldpwd, int flag)
 {
 	if (flag == 0)
 	{
 		if (main->home == NULL)
-			return (ft_cd_error(NULL, "minishell: cd: HOME not set"));
+			return (ft_cd_error(NULL, "HOME not set"));
 		if (chdir(main->home) == -1)
 			return (ft_cd_error(main->home, NULL));
 		*oldpwd = ft_goto(main);
@@ -124,9 +99,9 @@ int	ft_pre_goto(t_main *main, char **oldpwd, int flag)
 	else if (flag == 1)
 	{
 		if (main->oldpwd == NULL)
-			return (ft_cd_error(NULL, "minishell: cd: OLDPWD not set"));
-		if (chdir(main->oldpwd + 7) == -1)
-			return (ft_cd_error(main->oldpwd + 7, NULL));
+			return (ft_cd_error(NULL, "OLDPWD not set"));
+		if (chdir(main->oldpwd) == -1)
+			return (ft_cd_error(main->oldpwd, NULL));
 		*oldpwd = ft_goto(main);
 		if (*oldpwd == NULL)
 			return (-2);
@@ -135,7 +110,7 @@ int	ft_pre_goto(t_main *main, char **oldpwd, int flag)
 	return (0);
 }
 
-int	ft_exec_cd(t_main *main, t_cmd *cmd)
+int	ft_exec_cd(t_base *main, t_cmd *cmd)
 {
 	int		i;
 	char	*oldpwd;

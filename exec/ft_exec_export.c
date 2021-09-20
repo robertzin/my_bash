@@ -5,6 +5,8 @@ char	**ft_add_var(char **array, char *str)
 	int		i;
 	char	**new;
 
+	// printf("add var\n");
+	// printf("str: %s\n", str);
 	if (!str)
 		return (array);
 	i = 0;
@@ -12,7 +14,10 @@ char	**ft_add_var(char **array, char *str)
 		i++;
 	new = malloc(sizeof(char *) * (i + 2));
 	if (!new)
+	{
+		ft_print_error("malloc error", NULL, 121);
 		return (NULL);
+	}
 	i = -1;
 	if (array[0] != NULL)
 	{
@@ -24,6 +29,7 @@ char	**ft_add_var(char **array, char *str)
 		return (NULL);
 	new[++i] = NULL;
 	ft_doublearray_free(array);
+	// ft_doublearray_print(new);
 	return (new);
 }
 
@@ -41,27 +47,27 @@ int	ft_is_valid(char *str)
 	while (str[++i] != '\0' && j != i)
 	{
 		if (!ft_isalnum(str[i]))
-			return (0);
+			return (1);
 	}
-	return (1);
+	return (0);
 }
 
-void	ft_sorted_print(char **env)
+void	ft_sorted_print(char **envc)
 {
 	int		i;
 	int		j;
 	int		flag;
 
 	i = -1;
-	while (env[++i] != 0)
+	while (envc[++i] != 0)
 	{
 		j = -1;
 		flag = 0;
 		ft_putstr_fd("declare -x ", 1);
-		while (env[i][++j] != '\0')
+		while (envc[i][++j] != '\0')
 		{
-			ft_putchar_fd(env[i][j], 1);
-			if (env[i][j] == '=' && flag == 0)
+			ft_putchar_fd(envc[i][j], 1);
+			if (envc[i][j] == '=' && flag == 0)
 			{
 				flag = 1;
 				ft_putchar_fd('"', 1);
@@ -72,7 +78,7 @@ void	ft_sorted_print(char **env)
 	}
 }
 
-void	ft_sorted(char **env)
+void	ft_sorted(char **envc)
 {
 	int		i;
 	int		j;
@@ -81,28 +87,29 @@ void	ft_sorted(char **env)
 
 	k = 0;
 	i = -1;
-	while (env[++i] != NULL)
+	while (envc[++i] != NULL)
 	{
 		j = i;
-		while (j > 0 && env[j - 1][k] >= env[j][k])
+		while (j > 0 && envc[j - 1][k] >= envc[j][k])
 		{
-			if (ft_strcmp(env[j - 1], env[j]) > 0)
+			if (ft_strcmp(envc[j - 1], envc[j]) > 0)
 			{
-				tmp = env[j];
-				env[j] = env[j - 1];
-				env[j - 1] = tmp;
+				tmp = envc[j];
+				envc[j] = envc[j - 1];
+				envc[j - 1] = tmp;
 			}
 			j--;
 		}
 	}
 }
 
-int	ft_change_var(t_main *main, char *var)
+int	ft_change_var(t_base *main, char *var)
 {
 	int		i;
 	int		len;
 	char	*search;
 
+	// printf("change var\n");
 	len = 0;
 	search = ft_strchr(var, '=');
 	if (!search)
@@ -111,25 +118,17 @@ int	ft_change_var(t_main *main, char *var)
 		len++;
 	search = ft_substr(var, 0, len + 1);
 	if (!search)
-	{
-		global_error = 1;
-		ft_putendl_fd("malloc error\n", 2);
-		return (1);
-	}
+		return (ft_print_error("malloc error", NULL, 121));
 	i = -1;
-	while (main->env[++i] != NULL)
+	while (main->envc[++i] != NULL)
 	{
-		if (ft_strncmp(main->env[i], search, len) == 0)
+		if (ft_strncmp(main->envc[i], search, len) == 0)
 		{
 			free(search);
-			free(main->env[i]);
-			main->env[i] = ft_strdup(var);
-			if (!main->env[i])
-			{
-				global_error = 1;
-				ft_putendl_fd("malloc error\n", 2);
-				return (1);
-			}
+			free(main->envc[i]);
+			main->envc[i] = ft_strdup(var);
+			if (!main->envc[i])
+				return (ft_print_error("malloc error", NULL, 121));
 			return (1);
 		}
 	}
@@ -137,7 +136,7 @@ int	ft_change_var(t_main *main, char *var)
 	return (0);
 }
 
-int	ft_export_var(t_main *main, t_cmd *cmd)
+int	ft_export_var(t_base *main, t_cmd *cmd)
 {
 	int		i;
 	int		flag;
@@ -149,55 +148,45 @@ int	ft_export_var(t_main *main, t_cmd *cmd)
 	{
 		flag = 0;
 		if (!ft_isalpha(cmd->cmd[i][0]) && cmd->cmd[i][0] != '_')
-		{
-			global_error = 1;
-			printf("export error\n");
-			flag = -1;
-		}
-		else if (ft_is_valid(cmd->cmd[i]) == 0)
-		{
-			global_error = 1;
-			printf("export error\n");
-			flag = -1;
-		}
+			flag = ft_ide_error("export", cmd->cmd[i]);
+		else if (ft_is_valid(cmd->cmd[i]) != 0)
+			flag = ft_ide_error("export", cmd->cmd[i]);
 		else if (ft_strncmp(cmd->cmd[i], "_=", 2) != 0 && flag == 0)
 		{
 			is_it = ft_change_var(main, cmd->cmd[i]);
 			if (!is_it)
 			{
-				main->env = ft_add_var(main->env, cmd->cmd[i]);
-				if (!main->env)
-				{
-					global_error = 1;
-					ft_putendl_fd("add var error\n", 2);
-					return (-1);
-				}
+				main->envc = ft_add_var(main->envc, cmd->cmd[i]);
+				// ft_doublearray_print(main->envc);
+				if (!main->envc)
+					return (ft_print_error("add var error", NULL, 1));
 			}
 		}
 	}
 	return (flag);
 }
 
-int	ft_exec_export(t_main *main, t_cmd *cmd)
+int	ft_exec_export(t_base *main, t_cmd *cmd)
 {
 	int		ret;
 	char	**sorted_env;
 
 	ret = 0;
+	// printf("export: \n");
+	// ft_doublearray_print(cmd->cmd);
 	if (cmd->cmd[1] == NULL)
 	{
-		sorted_env = ft_doublearray_copy(main->env);
+		sorted_env = ft_doublearray_copy(main->envc);
 		if (!sorted_env)
-		{
-			global_error = 1;
-			printf("2d array copy error\n");
-			return (-1);
-		}
+			return (ft_print_error("2d array copy error", NULL, 1));
 		ft_sorted(sorted_env);
 		ft_sorted_print(sorted_env);
 		ft_doublearray_free(sorted_env);
 	}
 	else
 		ret = ft_export_var(main, cmd);
+	// printf("ret: %d\n", ret);
+	// printf("export done\n");
+	// ft_doublearray_print(main->envc);
 	return (ret);
 }

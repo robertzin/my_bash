@@ -6,13 +6,13 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:48:42 by yjama             #+#    #+#             */
-/*   Updated: 2021/09/11 12:59:48 by yjama            ###   ########.fr       */
+/*   Updated: 2021/07/19 12:12:01 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_count_words(const char *input, char c)
+static int	ft_count_words(const char *input, char c)
 {
 	int	i;
 	int	count;
@@ -35,7 +35,7 @@ int	ft_count_words(const char *input, char c)
 	return (count);
 }
 
-int	ft_count_letters(const char *input, char c)
+static int	ft_count_letters(const char *input, char c)
 {
 	int	i;
 
@@ -45,7 +45,7 @@ int	ft_count_letters(const char *input, char c)
 	return (i);
 }
 
-void	ft_memleak(char **array, int curr)
+static void	ft_memleak(char **array, int curr)
 {
 	int	i;
 
@@ -55,7 +55,7 @@ void	ft_memleak(char **array, int curr)
 	free(array);
 }
 
-char	**ft_array(char const *s, int words, char c, char **splitted)
+static char	**ft_array(char const *s, int words, char c, char **splitted)
 {
 	int		i;
 	int		j;

@@ -1,48 +1,86 @@
-NAME = minishell
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/09/16 20:45:39 by oharmund          #+#    #+#              #
+#    Updated: 2021/09/20 16:03:35 by yjama            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-HEADER = minishell.h
+HEADERS		= ./headers
 
-CC = gcc
+SRCS		=	ft_main.c\
+				pipe.c\
+				pipe_utils.c\
+				redirect.c\
+				redirect_utils.c\
+				inc_shlvl.c\
+				ft_errors.c\
+				ft_signal.c\
+				./parser/ft_cmd_parse.c\
+				./parser/ft_parser_utils.c\
+				./parser/ft_quotes_dollar_symbol.c\
+				./parser/ft_rd_filename_delimiter.c\
+				./parser/ft_redir_parse.c\
+				./parser/ft_redir_utils.c\
+				./parser/parser_env.c\
+				./parser/parser.c\
+				./exec/utils.c\
+				./exec/ft_exec.c\
+				./exec/ft_exec_cd.c\
+				./exec/ft_exec_echo.c\
+				./exec/ft_exec_exit.c\
+				./exec/ft_exec_export.c\
+				./exec/ft_exec_pwd.c\
+				./exec/ft_exec_unset.c\
+				./exec/executing_commands.c\
+				./exec/executing_commands_utils.c\
 
-CFLAGS = -g -Wall -Wextra -Werror -I/usr/local/opt/readline/include
+LIB_PATH	= ./libft
 
-SRC = 	utils.c\
-		parser.c\
-		ft_exec.c\
-		parser_env.c\
-		ft_exec_cd.c\
-		ft_exec_pwd.c\
-		ft_exec_echo.c\
-		ft_exec_exit.c\
-		ft_exec_unset.c\
-		ft_exec_export.c\
-		main.c\
+LIB			= libft.a
 
-LIBFT = libft.a
+OBJS		= $(SRCS:.c=.o)
 
-READLINE_LIB =	-lreadline \
-				-L/usr/local/opt/readline/lib \
+DEP			= $(OBJS:.o=.d)
 
-OBJ = $(SRC:.c=.o)
+NAME		= minishell
 
-%.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+GCC			= gcc
 
-all: $(NAME)
+RM			= rm -f
 
-$(LIBFT):
-	@$(MAKE) -C libft
-	@$(MAKE) fclean
-	@mv libft/$(LIBFT) .
+GFLAGS		= -Wall -Wextra -Werror -I $(HEADERS)
 
-$(NAME): $(LIBFT) $(OBJ) $(HEADER)
-	$(CC) -o $(NAME) ${LIBFT} $(OBJ) $(READLINE_LIB)
+USER		= robert_zin
 
-re: fclean all
+RL_FLAGS	= -lreadline -L/Users/$(USER)/.brew/Cellar/readline/8.1/lib/ -I/Users/$(USER)/.brew/Cellar/readline/8.1/include
+
+.c.o:
+			$(GCC) $(GFLAGS) -c -MMD $< -o $(<:.c=.o)
+
+$(NAME):	$(OBJS)
+			$(MAKE) -C $(LIB_PATH)
+			cp $(LIB_PATH)/$(LIB) ./
+			$(GCC) $(GFLAGS) -o $(NAME) -L. -lft $(RL_FLAGS) $(OBJS)
+
+all:		$(NAME)
 
 clean:
-	rm -f *.o $(OBJ)
-	@$(MAKE) -C libft clean
+			$(MAKE) clean -C $(LIB_PATH)
+			$(RM) $(OBJS)
 
-fclean: clean
-	rm -f $(NAME) $(LIBFT)
+fclean:		clean
+			$(MAKE) fclean -C $(LIB_PATH)
+			$(RM) $(NAME) $(LIB)
+			$(RM) $(DEP)
+
+re:			fclean all
+
+.PHONY:		all clean fclean re
+
+-include $(DEP)
+
