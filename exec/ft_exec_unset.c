@@ -2,6 +2,9 @@
 
 int	ft_unset_env(char *arg, t_base *main)
 {
+	arg = ft_strjoin(arg, "=");
+	if (!arg)
+		return (ft_print_error("malloc error", NULL, 121));
 	if (ft_strcmp(arg, "PWD=") == 0)
 	{
 		free(main->pwd);
@@ -41,14 +44,11 @@ int	ft_unset_arg_done(t_base *main, int pos)
 	k = -1;
 	while (main->envc[++j] != NULL)
 	{
-		// printf("j = %d, pos = %d\n", j, pos);
 		if (j == pos)
 			j++;
 		if (main->envc[j] == NULL)
 			break ;
-		// printf("main->envc[%d] = %s\n", j, main->envc[j]);
 		new_env[++k] = ft_strdup(main->envc[j]);
-		// printf("strdup\n");
 		if (!new_env[k])
 			return (ft_print_error("malloc error", NULL, 121));
 		if (main->envc[j] == NULL)
@@ -68,9 +68,9 @@ int	ft_unset_arg(t_base *main, char *arg)
 	int	ret;
 
 	ret = 0;
-	arg = ft_strjoin(arg, "=");
-	if (!arg)
-		return (ft_print_error("malloc error", NULL, 121));
+	// arg = ft_strjoin(arg, "=");
+	// if (!arg)
+		// return (ft_print_error("malloc error", NULL, 121));
 	ret = ft_unset_env(arg, main);
 	len = ft_strlen(arg);
 	pos = -1;
@@ -82,7 +82,7 @@ int	ft_unset_arg(t_base *main, char *arg)
 			break ;
 		}
 	}
-	free(arg);
+	// free(arg);
 	return (ret);
 }
 

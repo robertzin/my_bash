@@ -5,8 +5,6 @@ char	**ft_add_var(char **array, char *str)
 	int		i;
 	char	**new;
 
-	// printf("add var\n");
-	// printf("str: %s\n", str);
 	if (!str)
 		return (array);
 	i = 0;
@@ -29,27 +27,33 @@ char	**ft_add_var(char **array, char *str)
 		return (NULL);
 	new[++i] = NULL;
 	ft_doublearray_free(array);
-	// ft_doublearray_print(new);
 	return (new);
 }
 
-int	ft_is_valid(char *str)
+int	ft_is_valid(char *str, int one_word)
 {
 	int		i;
 	int		j;
 
-	i = -1;
+	i = 0;
 	j = 0;
-	// printf("str: %s\n", str);
-	while (str[j] != '=' && str[j] != '\0')
-		j++;
-	// printf("str[%d]: %c\n", j, str[j]);
-	if (str[j] == '=')
-		j++;
-	while (str[++i] != '\0' && j != i)
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (1);
+	if (one_word == 1)
 	{
-		if (!ft_isalnum(str[i]))
+		while (str[i] != '=' && str[i] != '\0')
+			i++;
+	}
+	else
+	{
+		while (str[i] != '=')
+			i++;
+	}
+	while (str[j] != '\0' && j != i)
+	{
+		if (!ft_isalnum(str[j]))
 			return (1);
+		j++;
 	}
 	return (0);
 }
@@ -75,7 +79,8 @@ void	ft_sorted_print(char **envc)
 				ft_putchar_fd('"', 1);
 			}
 		}
-		ft_putchar_fd('"', 1);
+		if (flag == 1)
+			ft_putchar_fd('"', 1);
 		ft_putchar_fd('\n', 1);
 	}
 }
@@ -105,26 +110,63 @@ void	ft_sorted(char **envc)
 	}
 }
 
-int	ft_change_var(t_base *main, char *var)
+int	ft_check_one_word(t_base *main, char *var)
 {
 	int		i;
 	int		len;
+	size_t	j;
+
+	i = -1;
+	len = 0;
+	while (var[len] != '\0')
+		len++;
+	while (main->envc[++i] != NULL)
+	{
+		if (ft_strncmp(main->envc[i], var, len) == 0)
+		{
+			// printf("main->envc[%d]: %s == %s (%d)\n", i, main->envc[i], search, j);
+			j = 0;
+			while (main->envc[i][j] != '=' && main->envc[i][j] != '\0')
+				j++;
+			// printf("j == %zu // main->envc[%d]: %s == %s (%d) // %zu == %zu\n", j, i, main->envc[i], var, len, j, ft_strlen(var));
+			if (j == ft_strlen(var))
+			{
+				return (1);
+			}
+		}
+	}
+	return (0);
+}
+
+// export Z ZZ ZZZ ZZZZ ZZZZZ
+// export Z=a ZZ ZZZ=ooo ZZZZ ZZZZZ=9
+// export Z=1 ZZ=2 ZZZ=3 ZZZZ=4 ZZZZZ=5
+// export Z=1 ZZ ZZZ=3 ZZZZ ZZZZZ=5
+
+int	ft_change_var(t_base *main, char *var)
+{
+	int		i;
+	int		j;
+	int		len;
 	char	*search;
 
-	// printf("change var\n");
 	len = 0;
 	search = ft_strchr(var, '=');
 	if (!search)
 		return (1);
 	while (var[len] != '=')
 		len++;
-	search = ft_substr(var, 0, len + 1);
+	search = ft_substr(var, 0, len);
 	if (!search)
 		return (ft_print_error("malloc error", NULL, 121));
 	i = -1;
 	while (main->envc[++i] != NULL)
 	{
-		if (ft_strncmp(main->envc[i], search, len) == 0)
+		j = 0;
+		while (main->envc[i][j] != '=' && main->envc[i][j] != '\0')
+			j++;
+		if ((ft_strncmp(main->envc[i], search, j) == 0) &&
+			(ft_strncmp(main->envc[i], search, ft_strlen(search)) == 0))
 		{
 			free(search);
 			free(main->envc[i]);
@@ -143,32 +185,32 @@ int	ft_export_var(t_base *main, t_cmd *cmd)
 	int		i;
 	int		flag;
 	int		is_it;
+	int		one_word;
 
 	i = 0;
 	is_it = 0;
 	while (cmd->cmd[++i] != NULL)
 	{
+		one_word = 0;
 		flag = 0;
-		if (!ft_isalpha(cmd->cmd[i][0]) && cmd->cmd[i][0] != '_')
-			flag = ft_ide_error("export", cmd->cmd[i]);
-		else if (ft_is_valid(cmd->cmd[i]) != 0)
+		if (!strchr(cmd->cmd[i], '='))
+			one_word = 1;
+		if (ft_is_valid(cmd->cmd[i], one_word) != 0)
 			flag = ft_ide_error("export", cmd->cmd[i]);
 		else if (ft_strncmp(cmd->cmd[i], "_=", 2) != 0 && flag == 0)
 		{
-			printf("change var\n");
-			is_it = ft_change_var(main, cmd->cmd[i]);
-			printf("is it: %d\n", is_it);
+			if (one_word == 0)
+				is_it = ft_change_var(main, cmd->cmd[i]);
+			else
+				is_it = ft_check_one_word(main, cmd->cmd[i]);
 			if (!is_it)
 			{
-				printf("add var\n");
 				main->envc = ft_add_var(main->envc, cmd->cmd[i]);
-				// ft_doublearray_print(main->envc);
 				if (!main->envc)
 					return (ft_print_error("add var error", NULL, 1));
 			}
 		}
 	}
-	printf("retrun flag\n");
 	return (flag);
 }
 
@@ -178,8 +220,6 @@ int	ft_exec_export(t_base *main, t_cmd *cmd)
 	char	**sorted_env;
 
 	ret = 0;
-	// printf("export: \n");
-	// ft_doublearray_print(cmd->cmd);
 	if (cmd->cmd[1] == NULL)
 	{
 		sorted_env = ft_doublearray_copy(main->envc);
@@ -191,8 +231,5 @@ int	ft_exec_export(t_base *main, t_cmd *cmd)
 	}
 	else
 		ret = ft_export_var(main, cmd);
-	// printf("ret: %d\n", ret);
-	// printf("export done\n");
-	// ft_doublearray_print(main->envc);
 	return (ret);
 }
