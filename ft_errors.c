@@ -13,16 +13,22 @@ int	ft_ide_error(char *cmd, char *str)
 	return (-1);
 }
 
-void	ft_exit_error(char *minishell, char *args, char *error_str)
+void	ft_exit_error(char *error_str, int error)
 {
-	global_error = 1;
-	if (minishell != NULL)
-		ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("exit\n", 2);
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd("exit: ", 2);
-	if (args != NULL)
-		ft_putstr_fd(args, 2);
-	ft_putstr_fd(error_str, 2);
-	ft_putchar_fd('\n', 2);
+	if (error == 1)
+	{
+		global_error = 255;
+		ft_putstr_fd(error_str, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+	}
+	else
+	{
+		global_error = 1;
+		ft_putstr_fd("too many arguments\n", 2);
+	}
 }
 
 int	ft_cd_error(char *var, char *str)
@@ -51,7 +57,6 @@ int	ft_cd_error(char *var, char *str)
 int	ft_print_error(char *str, char *cmd, int code)
 {
 	global_error = code;
-	// printf("printf error: \n");
 	write(2, "minishell: ", 11);
 	if (cmd != NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:43:09 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/20 16:03:02 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/22 14:41:58 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	ft_exec_cmd(t_base *b, int num)
 	int	id;
 	int	status;
 
+	signal(SIGQUIT, ignore_squit2);
+	signal(SIGINT, ignore_sint2);
 	id = fork();
 	if (id == 0)
 		ft_childproc(b, num);
@@ -100,11 +102,9 @@ int	ft_exec_cmd(t_base *b, int num)
 		return (-1);
 	else
 	{
-		signal(SIGQUIT, ignore_squit2);
-		signal(SIGINT, ignore_sint2);
 		waitpid(id, &status, 0);
-		b->err = WEXITSTATUS(status);
-		return (0);
+		if (WIFEXITED(status))
+			global_error = WEXITSTATUS(status);
 	}
 	return (0);
 }

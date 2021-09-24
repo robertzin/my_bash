@@ -40,10 +40,12 @@ int	ft_is_valid(char *str)
 
 	i = -1;
 	j = 0;
+	// printf("str: %s\n", str);
 	while (str[j] != '=' && str[j] != '\0')
 		j++;
-	if (str[j] != '=')
-		return (1);
+	// printf("str[%d]: %c\n", j, str[j]);
+	if (str[j] == '=')
+		j++;
 	while (str[++i] != '\0' && j != i)
 	{
 		if (!ft_isalnum(str[i]))
@@ -153,9 +155,12 @@ int	ft_export_var(t_base *main, t_cmd *cmd)
 			flag = ft_ide_error("export", cmd->cmd[i]);
 		else if (ft_strncmp(cmd->cmd[i], "_=", 2) != 0 && flag == 0)
 		{
+			printf("change var\n");
 			is_it = ft_change_var(main, cmd->cmd[i]);
+			printf("is it: %d\n", is_it);
 			if (!is_it)
 			{
+				printf("add var\n");
 				main->envc = ft_add_var(main->envc, cmd->cmd[i]);
 				// ft_doublearray_print(main->envc);
 				if (!main->envc)
@@ -163,6 +168,7 @@ int	ft_export_var(t_base *main, t_cmd *cmd)
 			}
 		}
 	}
+	printf("retrun flag\n");
 	return (flag);
 }
 

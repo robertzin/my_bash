@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_rd_filename_delimiter.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:00 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/16 20:48:03 by oharmund         ###   ########.fr       */
+/*   Updated: 2021/09/20 18:55:58 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	ft_filename(char *str, int *i, t_base *b, char **envp)
 	while (str[*i] == ' ')
 		(*i)++;
 	if (!str[*i] || str[*i] == '\n' || str[*i] == '<' || str[*i] == '>')
-		return (-1);
+		return (-1); //unexpected token 'newline'
 	while (str[*i] != ' ' && str[*i] && str[*i] != '\n')
 	{
 		ft_filename_part(str, i, b, envp);

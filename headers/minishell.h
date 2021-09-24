@@ -6,18 +6,15 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:28:12 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/19 21:48:20 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/22 15:06:35 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "libft.h"
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -28,7 +25,10 @@
 # include <ctype.h>
 # include <limits.h>
 # include <signal.h>
-#include <errno.h>
+# include <errno.h>
+// # include <readline/history.h>
+# include <readline/readline.h>
+# include "libft.h"
 
 int	global_error;
 
@@ -111,8 +111,9 @@ int		ft_exec_export(t_base *main, t_cmd *cmd);
 int		ft_exec_unset(t_base *main, t_cmd *cmd);
 
 void	ft_doublearray_print(char **array);
-char	**ft_doublearray_copy(char **array);
 void	ft_doublearray_free(char **array);
+char	**ft_doublearray_copy(char **array);
+int 	ft_unset_oldpwd(t_base *b);
 
 void	ft_clean_rdstr(t_redir *rd, int i);
 int		ft_start_exec(t_base *b);
@@ -135,15 +136,20 @@ int		ft_rev_rdir(t_base *b, int num, int i);
 int		ft_doub_rdir(t_base *b, int num, int i);
 int		ft_rdir(t_base *b, int num, int i);
 
-void	ignore_squit(int code);
-void	ignore_sint(int code);
-void	ignore_sint2(int code);
-void	ignore_squit2(int code);
+void	sighandler_main(int sig_num);
+void	sighandler_fork(int sig_num);
 
-void	ft_exit_error(char *minishell, char *args, char *error_str);
+void	ft_exit_error(char *error_str, int error);
 int		ft_print_error(char *str, char *cmd, int code);
 int		ft_ide_error(char *cmd, char *str);
 int		ft_cd_error(char *var, char *str);
 int		ft_execve_error(char *str);
+
+void	ignore_sint(int code);
+void	ignore_sint2(int code);
+void	ignore_squit(int code);
+void	ignore_squit2(int code);
+int		get_next_line(int fd, char **line);
+void 	rl_replace_line(const char *, int);
 
 #endif

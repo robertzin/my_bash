@@ -50,3 +50,19 @@ void	ft_doublearray_free(char **array)
 		free(array);
 	}
 }
+
+int ft_unset_oldpwd(t_base *b)
+{
+	t_cmd	cmd;
+
+	(void)b;
+	cmd.cmd = malloc(sizeof(char *) * 3);
+	if (!cmd.cmd)
+		return (ft_print_error("malloc error", NULL, 121));
+	cmd.cmd[0] = "unset";
+	cmd.cmd[1] = "OLDPWD";
+	cmd.cmd[2] = NULL;
+	ft_exec_unset(b, &cmd);
+	free(cmd.cmd);
+	return (0);
+}
