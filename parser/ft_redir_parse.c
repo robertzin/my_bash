@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:36 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/16 20:48:39 by oharmund         ###   ########.fr       */
+/*   Updated: 2021/09/25 18:49:39 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ int	ft_redir_parse(char *str, int *i, t_base *b)
 
 	k = ft_memal_redir(b);
 	if (k < 0)
-		return (-1);
+		return(ft_print_error("malloc error", NULL, 121));
 	if (str[*i] == '>')
 		k = ft_redir_output(b, i, str);
 	else if (str[*i] == '<')
 		k = ft_redir_input(b, i, str);
 	if (k < 0)
-		return (-1);
+		return(ft_print_error("syntax error near unexpected token `newline'", NULL, 258));
 	if (b->cmd[b->count_cmd - 1].rd[b->cmd[b->count_cmd - 1].count - 1].db_rev_rdir == 1)
 		k = ft_delimiter(str, i, b);
 	else

@@ -51,6 +51,22 @@ int	ft_check_one_word(t_base *main, char *var)
 	return (0);
 }
 
+int	ft_change_var_norm(char *var, char **search, int len)
+{
+	*search = ft_strchr(var, '=');
+	if (!*search)
+		return (-1);
+	while (var[len] != '=')
+		len++;
+	*search = ft_substr(var, 0, len);
+	if (!search)
+	{
+		ft_print_error("malloc error", NULL, 121);
+		return (-1);
+	}
+	return (0);
+}
+
 int	ft_change_var(t_base *main, char *var)
 {
 	int		i;
@@ -59,14 +75,9 @@ int	ft_change_var(t_base *main, char *var)
 	char	*search;
 
 	len = 0;
-	search = ft_strchr(var, '=');
-	if (!search)
+	search = NULL;
+	if (ft_change_var_norm(var, &search, len) < 0)
 		return (-1);
-	while (var[len] != '=')
-		len++;
-	search = ft_substr(var, 0, len);
-	if (!search)
-		return (ft_print_error("malloc error", NULL, 121));
 	i = -1;
 	while (main->envc[++i] != NULL)
 	{
@@ -88,17 +99,13 @@ int	ft_change_var(t_base *main, char *var)
 	return (0);
 }
 
-
-
 int	ft_export_var(t_base *main, t_cmd *cmd)
 {
 	int		i;
 	int		flag;
-	int		is_it;
 	int		one_word;
 
 	i = 0;
-	is_it = 0;
 	while (cmd->cmd[++i] != NULL)
 	{
 		one_word = 0;
@@ -109,16 +116,8 @@ int	ft_export_var(t_base *main, t_cmd *cmd)
 			flag = ft_ide_error("export", cmd->cmd[i]);
 		else if (ft_strncmp(cmd->cmd[i], "_=", 2) != 0 && flag == 0)
 		{
-			if (one_word == 0)
-				is_it = ft_change_var(main, cmd->cmd[i]);
-			else
-				is_it = ft_check_one_word(main, cmd->cmd[i]);
-			if (!is_it)
-			{
-				main->envc = ft_add_var(main->envc, cmd->cmd[i]);
-				if (!main->envc)
-					return (ft_print_error("add var error", NULL, 1));
-			}
+			if (ft_export_var_norm(main, cmd, one_word, i) < 0)
+				return (-1);
 		}
 	}
 	return (flag);

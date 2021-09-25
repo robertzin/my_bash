@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:58 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 17:41:28 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 18:51:23 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,16 @@ int	ft_rd_pipe_pars(t_base *b, int *i)
 	}
 	else if (b->str_rl[*i] == '|')
 	{
+		if (!b->cmd[b->count_cmd - 1].cmd[0] && !b->cmd[b->count_cmd - 1].rd)
+			return(ft_print_error("syntax error near unexpected token `|'", NULL, 130));
+		(*i)++;
+		while(b->str_rl[*i] && b->str_rl[*i] == ' ')
+			(*i)++;
+		if (!b->str_rl[*i] || b->str_rl[*i] == '|' || b->str_rl[*i] == '\n')
+			return(ft_print_error("syntax error near unexpected token `|'", NULL, 130));
 		k = ft_memal_cmd(b);
 		if (k < 0)
-			return(ft_print_error("malloc error", NULL, 121)); // Добавлено
+			return(ft_print_error("malloc error", NULL, 121));
 		b->count_f++;
 	}
 	return (0);
@@ -89,12 +96,10 @@ int	ft_word(t_base *b, int *i)
 		{
 			k = ft_rd_pipe_pars(b, i);
 			if (k < 0)
-				return(ft_print_error("syntax error near unexpected token `newline'", NULL, 258));
+				return(-1);
 		}
 		else
 			s = ft_symbol(b->str_rl, s, i);
-		// if (g_error != 0)								// Всё таки вернула это условие, так как нужно вернуть -1. Из-за этого и зависало)
-		// 	return (-2);
 		(*i)++;
 	}
 	if (s)
@@ -122,11 +127,6 @@ int	ft_parser(t_base *b)
 			return (-3);
 		while (b->str_rl[*i] == ' ')
 			(*i)++;
-	}
-	if (b->count_cmd <= b->count_f)
-	{
-		g_error = 130;
-		return (-4);
 	}
 	free(i);
 	return (0);

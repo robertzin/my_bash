@@ -1,29 +1,5 @@
 #include "minishell.h"
 
-void	ft_unset_env_norm(t_base *main, int flag)
-{
-	if (flag == 0)
-	{
-		free(main->pwd);
-		main->pwd = NULL;
-	}
-	else if (flag == 1)
-	{
-		free(main->oldpwd);
-		main->oldpwd = NULL;
-	}
-	else if (flag == 2)
-	{
-		free(main->home);
-		main->home = NULL;
-	}
-	else if (flag == 3)
-	{
-		ft_doublearray_free(main->path);
-		main->path = NULL;
-	}
-}
-
 int	ft_unset_env(char *arg, t_base *main)
 {
 	char	*tmp;
@@ -55,23 +31,10 @@ int	ft_unset_arg_done(t_base *main, int pos)
 	k = 0;
 	while (main->envc[k] != NULL)
 		k++;
-	new_env = malloc(sizeof(char *) * k);
-	if (!new_env)
-		return (ft_print_error("malloc error", NULL, 121));
 	j = -1;
-	k = -1;
-	while (main->envc[++j] != NULL)
-	{
-		if (j == pos)
-			j++;
-		if (main->envc[j] == NULL)
-			break ;
-		new_env[++k] = ft_strdup(main->envc[j]);
-		if (!new_env[k])
-			return (ft_print_error("malloc error", NULL, 121));
-		if (main->envc[j] == NULL)
-			j--;
-	}
+	new_env = ft_unset_arg_done_norm(main, pos, &j, &k);
+	if (!new_env)
+		return (-1);
 	ft_doublearray_free(main->envc);
 	if (new_env[k] != NULL)
 		new_env[++k] = NULL;

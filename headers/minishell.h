@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:28:12 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 17:34:33 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 18:29:44 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,11 @@ void	ft_doublearray_print(char **array);
 char	**ft_doublearray_copy(char **array);
 void	ft_doublearray_free(char **array);
 int		ft_unset_oldpwd(t_base *b);
+void	ft_unset_env_norm(t_base *main, int flag);
+char	**ft_unset_arg_done_norm(t_base *main, int pos, int *j, int *k);
+int		ft_export_var_norm(t_base *main, t_cmd *cmd, int one_word, int i);
+int		ft_change_var(t_base *main, char *var);
+int		ft_check_one_word(t_base *main, char *var);
 
 void	ft_clean_rdstr(t_redir *rd, int i);
 int		ft_start_exec(t_base *b);

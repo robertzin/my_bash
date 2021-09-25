@@ -6,7 +6,7 @@
 #    By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/16 20:45:39 by oharmund          #+#    #+#              #
-#    Updated: 2021/09/20 16:03:35 by yjama            ###   ########.fr        #
+#    Updated: 2021/09/25 18:13:24 by yjama            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRCS		=	ft_main.c\
 				./parser/parser_env.c\
 				./parser/parser.c\
 				./exec/utils.c\
+				./exec/utils_norm.c\
 				./exec/ft_exec.c\
 				./exec/ft_exec_cd.c\
 				./exec/ft_exec_echo.c\
