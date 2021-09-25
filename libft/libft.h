@@ -6,14 +6,13 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/09 11:49:20 by yjama             #+#    #+#             */
-/*   Updated: 2021/09/21 14:17:27 by yjama            ###   ########.fr       */
+/*   Updated: 2021/08/28 20:01:55 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# define BUFFER_SIZE 1
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>

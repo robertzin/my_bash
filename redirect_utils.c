@@ -45,7 +45,7 @@ int	ft_write_heredoc(t_base *b, int num, int i)
 	{
 		s = NULL;
 		s = readline("> ");
-		k = ft_strncmp(s, b->cmd[num].rd[i].delimiter, len);
+		k = ft_strcmp(s, b->cmd[num].rd[i].delimiter);
 		if (k != 0)
 		{
 			write(fd, s, ft_strlen(s));

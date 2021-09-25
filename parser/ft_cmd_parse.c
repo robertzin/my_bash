@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cmd_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:46:43 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/16 20:46:46 by oharmund         ###   ########.fr       */
+/*   Updated: 2021/09/25 11:47:03 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,16 @@
 void	ft_clean_cmd(t_cmd *cmd, int count)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < count)
 	{
-		ft_cleanarr(cmd[i].cmd);
-		j = 0;
-		while (j < cmd[i].count)
+		if (cmd[i].cmd)
 		{
-			if (cmd[i].rd[j].filename)
-				free(cmd[i].rd[j].filename);
-			if (cmd[i].rd[j].delimiter)
-				free(cmd[i].rd[j].delimiter);
-			j++;
+			ft_cleanarr(cmd[i].cmd);
 		}
-		free(cmd[i].rd);
+		if (cmd[i].rd)
+			ft_clean_rdstr(cmd[i].rd, cmd[i].count);
 		i++;
 	}
 }
@@ -46,7 +40,7 @@ t_cmd	*ft_cmdcpy(t_cmd *src, t_cmd *dst, int count)
 		dst[i].cmd = ft_envcpy(src[i].cmd);
 		if (!dst[i].cmd)
 			return (NULL);
-		dst[i].rd = (t_redir *)malloc(sizeof(t_redir) * count);
+		dst[i].rd = (t_redir *)malloc(sizeof(t_redir) * src[i].count);
 		if (!dst[i].rd)
 		{
 			ft_cleanarr(dst[i].cmd);
@@ -55,6 +49,9 @@ t_cmd	*ft_cmdcpy(t_cmd *src, t_cmd *dst, int count)
 		dst[i].rd = ft_rdcpy(src[i].rd, dst[i].rd, src[i].count);
 		if (!dst[i].rd)
 			return (NULL);
+		dst[i].sstdi = src[i].sstdi;
+		dst[i].sstdo = src[i].sstdo;
+		dst[i].hdoc = src[i].hdoc;
 		i++;
 	}
 	return (dst);
@@ -99,9 +96,9 @@ int	ft_memal_cmd(t_base *b)
 		return (-1);
 	}
 	b->cmd = ft_cmdcpy(c, b->cmd, b->count_cmd - 1);
-	ft_clean_cmd(c, b->count_cmd - 1);
 	if (!b->cmd)
 		return (-1);
+	ft_clean_cmd(c, b->count_cmd - 1);
 	k = ft_init_cmd(b);
 	return (k);
 }

@@ -1,11 +1,5 @@
 #include <minishell.h>
 
-void	ignore_squit(int code)
-{
-	(void)code;
-	write(1, " \b\b \b", 5);
-}
-
 void	ignore_sint(int code)
 {
 	(void)code;

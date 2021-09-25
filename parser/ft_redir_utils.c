@@ -19,17 +19,11 @@ void	ft_part_rd_copy(t_redir *src, t_redir *dst, int i)
 	dst[i].rev_rdir = src[i].rev_rdir;
 	dst[i].db_rev_rdir = src[i].db_rev_rdir;
 	if (src[i].filename)
-	{
 		dst[i].filename = ft_strdup(src[i].filename);
-		free(src[i].filename);
-	}
 	else
 		dst[i].filename = NULL;
 	if (src[i].delimiter)
-	{
 		dst[i].delimiter = ft_strdup(src[i].delimiter);
-		free(src[i].delimiter);
-	}
 	else
 		dst[i].delimiter = NULL;
 }
@@ -62,7 +56,7 @@ int	ft_part_memal_redir(t_base *b)
 		return (-1);
 	rd_copy = ft_rdcpy(b->cmd[b->count_cmd - 1].rd, rd_copy, \
 		b->cmd[b->count_cmd - 1].count);
-	free(b->cmd[b->count_cmd - 1].rd);
+	ft_clean_rdstr(b->cmd[b->count_cmd - 1].rd, b->cmd[b->count_cmd - 1].count);
 	b->cmd[b->count_cmd - 1].count++;
 	b->cmd[b->count_cmd - 1].rd = (t_redir *)malloc(sizeof(t_redir) * \
 		(b->cmd[b->count_cmd - 1].count));
@@ -70,7 +64,7 @@ int	ft_part_memal_redir(t_base *b)
 		return (-1);
 	b->cmd[b->count_cmd - 1].rd = ft_rdcpy(rd_copy, \
 		b->cmd[b->count_cmd - 1].rd, b->cmd[b->count_cmd - 1].count - 1);
-	free(rd_copy);
+	ft_clean_rdstr(rd_copy, b->cmd[b->count_cmd - 1].count - 1);
 	return (0);
 }
 

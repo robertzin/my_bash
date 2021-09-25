@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing_commands_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
+/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:43:24 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/20 18:48:45 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/16 20:43:32 by oharmund         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,6 @@ char	**ft_concat(char **arr, char *str)
 	while (arr[i])
 		i++;
 	arr_copy = (char **)malloc(sizeof(char *) * (i + 1));
-	if (!arr_copy)
-	{
-		ft_print_error("malloc error", NULL, 121);
-		return (NULL);
-	}
 	i = 0;
 	while (arr[i])
 	{

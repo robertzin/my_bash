@@ -70,7 +70,7 @@ int	ft_redir_input(t_base *b, int *i, char *str)
 	return (0);
 }
 
-int	ft_redir_parse(char *str, int *i, t_base *b, char **envp)
+int	ft_redir_parse(char *str, int *i, t_base *b)
 {
 	int k;
 
@@ -86,7 +86,7 @@ int	ft_redir_parse(char *str, int *i, t_base *b, char **envp)
 	if (b->cmd[b->count_cmd - 1].rd[b->cmd[b->count_cmd - 1].count - 1].db_rev_rdir == 1)
 		k = ft_delimiter(str, i, b);
 	else
-		k = ft_filename(str, i, b, envp);
+		k = ft_filename(str, i, b);
 	if (k < 0)
 		return (-1);
 	return (0);

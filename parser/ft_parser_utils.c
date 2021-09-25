@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:47:19 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/20 13:59:06 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 12:14:11 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ void	ft_cleanarr(char **arr)
 	int	i;
 
 	i = 0;
+	if (!arr)
+		return;
 	while (arr[i])
 	{
-		free(arr[i]);
+		if (arr[i])
+			free(arr[i]);
 		i++;
 	}
 	free(arr);
@@ -79,8 +82,14 @@ char	*ft_getenv(char *s, char **envp)
 
 void	ft_free_struct(t_base *b)
 {
-	ft_clean_cmd(b->cmd, b->count_cmd);
-	free(b->str_rl);
+	if (b->cmd)
+	{
+		ft_clean_cmd(b->cmd, b->count_cmd);
+	}
+	if (b->str_rl)
+	{
+		free(b->str_rl);
+	}
 }
 
 void	ft_init(t_base *b)

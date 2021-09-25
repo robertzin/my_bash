@@ -2,29 +2,32 @@
 
 int	ft_unset_env(char *arg, t_base *main)
 {
-	arg = ft_strjoin(arg, "=");
-	if (!arg)
+	char *tmp;
+
+	tmp = ft_strjoin(arg, "=");
+	if (!tmp)
 		return (ft_print_error("malloc error", NULL, 121));
-	if (ft_strcmp(arg, "PWD=") == 0)
+	if (ft_strcmp(tmp, "PWD=") == 0)
 	{
 		free(main->pwd);
 		main->pwd = NULL;
 	}
-	if (ft_strcmp(arg, "OLDPWD=") == 0)
+	if (ft_strcmp(tmp, "OLDPWD=") == 0)
 	{
 		free(main->oldpwd);
 		main->oldpwd = NULL;
 	}
-	if (ft_strcmp(arg, "HOME=") == 0)
+	if (ft_strcmp(tmp, "HOME=") == 0)
 	{
 		free(main->home);
 		main->home = NULL;
 	}
-	if (ft_strcmp(arg, "PATH=") == 0)
+	if (ft_strcmp(tmp, "PATH=") == 0)
 	{
 		ft_doublearray_free(main->path);
 		main->path = NULL;
 	}
+	free(tmp);
 	return (0);
 }
 
@@ -63,26 +66,29 @@ int	ft_unset_arg_done(t_base *main, int pos)
 
 int	ft_unset_arg(t_base *main, char *arg)
 {
-	int	pos;
-	int	len;
-	int	ret;
+	size_t	j;
+	int		pos;
+	int		len;
+	int		ret;
 
 	ret = 0;
-	// arg = ft_strjoin(arg, "=");
-	// if (!arg)
-		// return (ft_print_error("malloc error", NULL, 121));
 	ret = ft_unset_env(arg, main);
 	len = ft_strlen(arg);
 	pos = -1;
 	while (main->envc[++pos] != NULL)
 	{
-		if (ft_strncmp(arg, main->envc[pos], len) == 0)
+		if (ft_strncmp(main->envc[pos], arg, len) == 0)
 		{
-			ft_unset_arg_done(main, pos);
-			break ;
+			j = 0;
+			while (main->envc[pos][j] != '=' && main->envc[pos][j] != '\0')
+				j++;
+			if (j == ft_strlen(arg))
+			{
+				ft_unset_arg_done(main, pos);
+				break ;
+			}
 		}
 	}
-	// free(arg);
 	return (ret);
 }
 

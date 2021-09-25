@@ -6,7 +6,7 @@
 #    By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/16 20:45:39 by oharmund          #+#    #+#              #
-#    Updated: 2021/09/21 23:15:48 by yjama            ###   ########.fr        #
+#    Updated: 2021/09/20 16:03:35 by yjama            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,9 +55,7 @@ RM			= rm -f
 
 GFLAGS		= -Wall -Wextra -Werror -I $(HEADERS)
 
-USER		= robert_zin
-
-RL_FLAGS	= -lreadline -L /Users/$(USER)/.brew/Cellar/readline/8.1/lib -I /Users/$(USER)/.brew/Cellar/readline/8.1/include
+RL_FLAGS	= -lreadline -L/Users/$(USER)/.brew/Cellar/readline/8.1/lib/ -I/Users/$(USER)/.brew/Cellar/readline/8.1/include
 
 .c.o:
 			$(GCC) $(GFLAGS) -c -MMD $< -o $(<:.c=.o)
@@ -65,7 +63,7 @@ RL_FLAGS	= -lreadline -L /Users/$(USER)/.brew/Cellar/readline/8.1/lib -I /Users/
 $(NAME):	$(OBJS)
 			$(MAKE) -C $(LIB_PATH)
 			cp $(LIB_PATH)/$(LIB) ./
-			$(GCC) $(GFLAGS) -L. -lft $(RL_FLAGS) $(OBJS) -o $(NAME)
+			$(GCC) $(GFLAGS) -o $(NAME) -L. -lft $(RL_FLAGS) $(OBJS)
 
 all:		$(NAME)
 

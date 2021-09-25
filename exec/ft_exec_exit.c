@@ -21,15 +21,19 @@ void	ft_exec_exit(t_cmd *cmd)
 
 	i = 1;
 	j = 0;
+	ft_putendl_fd("exit", 1);
 	if (cmd->cmd && cmd->cmd[i] != NULL)
 	{
 		while (cmd->cmd[j] != NULL)
 			j++;
 		if (ft_check_arg(cmd->cmd[i]) == 0)
-			ft_exit_error(cmd->cmd[i], 1);
+		{
+			ft_exit_error(NULL, cmd->cmd[i], ": numeric argument required");
+			exit(255);
+		}
 		else if (j > 2)
 		{
-			ft_exit_error(NULL, 2);
+			ft_exit_error("minishell", NULL, "too many arguments");
 			return ;
 		}
 		exit(ft_atoi(cmd->cmd[i]));

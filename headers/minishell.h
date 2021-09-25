@@ -6,15 +6,18 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:28:12 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/22 15:06:35 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 12:11:14 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include "libft.h"
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/stat.h>
@@ -25,12 +28,9 @@
 # include <ctype.h>
 # include <limits.h>
 # include <signal.h>
-# include <errno.h>
-// # include <readline/history.h>
-# include <readline/readline.h>
-# include "libft.h"
+#include <errno.h>
 
-int	global_error;
+int global_error;
 
 typedef struct s_redir
 {
@@ -66,6 +66,7 @@ typedef struct s_base
 	char	*pwd;
 	char	*oldpwd;
 	int		exit;
+	int		err_fl;
 }				t_base;
 
 void	ft_cleanarr(char **arr);
@@ -74,15 +75,15 @@ char	**ft_envcpy(char **envp);
 char	*ft_symbol(char *str, char *s, int *i);
 char	*ft_slash(char *str, char *s, int *i);
 char	*ft_getenv(char *s, char **envp);
-char	*ft_dollar(char *str, char *s, int *i, char **envp);
-char	*ft_single_quotes(char *str, char *s, int *i);
-char	*ft_double_quotes(char *str, char *s, int *i, char **envp);
+char	*ft_dollar(char *str, char *s, int *i, t_base *b);
+char	*ft_single_quotes(char *str, char *s, int *i, t_base *b);
+char	*ft_double_quotes(char *str, char *s, int *i, t_base  *b);
 t_redir	*ft_rdcpy(t_redir *src, t_redir *dst, int count);
 void	ft_init_redir(t_redir *rd);
 int		ft_memal_redir(t_base *b);
-int		ft_filename(char *str, int *i, t_base *b, char **envp);
+int		ft_filename(char *str, int *i, t_base *b);
 int		ft_delimiter(char *str, int *i, t_base *b);
-int		ft_redir_parse(char *str, int *i, t_base *b, char **envp);
+int		ft_redir_parse(char *str, int *i, t_base *b);
 int		ft_init_cmd(t_base *b);
 t_cmd	*ft_cmdcpy(t_cmd *src, t_cmd *dst, int count);
 void	ft_clean_cmd(t_cmd *cmd, int count);
@@ -111,8 +112,8 @@ int		ft_exec_export(t_base *main, t_cmd *cmd);
 int		ft_exec_unset(t_base *main, t_cmd *cmd);
 
 void	ft_doublearray_print(char **array);
-void	ft_doublearray_free(char **array);
 char	**ft_doublearray_copy(char **array);
+void	ft_doublearray_free(char **array);
 int 	ft_unset_oldpwd(t_base *b);
 
 void	ft_clean_rdstr(t_redir *rd, int i);
@@ -136,20 +137,16 @@ int		ft_rev_rdir(t_base *b, int num, int i);
 int		ft_doub_rdir(t_base *b, int num, int i);
 int		ft_rdir(t_base *b, int num, int i);
 
-void	sighandler_main(int sig_num);
-void	sighandler_fork(int sig_num);
+void	ignore_squit(int code);
+void	ignore_sint(int code);
+void	ignore_sint2(int code);
+void	ignore_squit2(int code);
 
-void	ft_exit_error(char *error_str, int error);
+void	ft_exit_error(char *minishell, char *args, char *error_str);
 int		ft_print_error(char *str, char *cmd, int code);
 int		ft_ide_error(char *cmd, char *str);
 int		ft_cd_error(char *var, char *str);
 int		ft_execve_error(char *str);
-
-void	ignore_sint(int code);
-void	ignore_sint2(int code);
-void	ignore_squit(int code);
-void	ignore_squit2(int code);
-int		get_next_line(int fd, char **line);
 void 	rl_replace_line(const char *, int);
 
 #endif

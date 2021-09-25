@@ -15,8 +15,11 @@
 int	ft_returnfd(int fd, int io, int sstd)
 {
 	close(fd);
-	dup2(sstd, io);
-	close(sstd);
+	if (sstd != -1)
+	{
+		dup2(sstd, io);
+		close(sstd);
+	}
 	return (0);
 }
 
@@ -49,7 +52,6 @@ int	ft_redir_ip(t_base *b, int num, int fd2, int i)
 	{
 		if (fd2 != 0)
 			ft_returnfd(fd2, 0, b->cmd[num].sstdi);
-		ft_write_heredoc(b, num, i);
 		fd2 = ft_db_rev_rdir(b, num);
 	}
 	return (fd2);
@@ -64,7 +66,7 @@ int	ft_redirect(t_base *b, int num)
 	i = -1;
 	fd1 = 0;
 	fd2 = 0;
-	while (i++ < b->cmd[num].count)
+	while (++i < b->cmd[num].count)
 	{
 		if (b->cmd[num].rd[i].rdir == 1 || b->cmd[num].rd[i].doub_rdir == 1)
 			fd1 = ft_redir_op(b, num, fd1, i);
@@ -75,8 +77,7 @@ int	ft_redirect(t_base *b, int num)
 			return (-1);
 	}
 	ft_exec(b, num);
-	if (b->cmd[num].hdoc == 1)
-		unlink(".tmp");
+	unlink(".tmp");
 	if (fd1 > 0)
 		ft_returnfd(fd1, 1, b->cmd[num].sstdo);
 	if (fd2 > 0)
