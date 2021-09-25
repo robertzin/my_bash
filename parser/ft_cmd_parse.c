@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:46:43 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 11:47:03 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 17:47:57 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int	ft_init_cmd(t_base *b)
 	if (!b->cmd)
 		return (-1);
 	b->cmd[b->count_cmd - 1].cmd = (char **)malloc(sizeof(char *));
-	b->cmd[b->count_cmd - 1].rd = (t_redir *)malloc(sizeof(t_redir));
-	if (!b->cmd[b->count_cmd - 1].cmd || !b->cmd[b->count_cmd - 1].rd)
+	if (!b->cmd[b->count_cmd - 1].cmd)
 		return (-1);
+	b->cmd[b->count_cmd - 1].rd = NULL;
 	b->cmd[b->count_cmd - 1].count = 0;
 	b->cmd[b->count_cmd - 1].cmd[0] = NULL;
 	b->cmd[b->count_cmd - 1].sstdi = -1;

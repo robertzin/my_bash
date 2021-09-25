@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/28 19:59:43 by yjama             #+#    #+#             */
-/*   Updated: 2021/08/28 19:59:45 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 15:53:32 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char	*ft_strjoin_free(char *s1, const char *s2)
 		return (ft_strdup(s1));
 	a = ft_strlen(s1);
 	b = ft_strlen(s2);
-	if ((s3 = ft_line_malloc(a + b, sizeof(char))) == NULL)
+	s3 = ft_line_malloc(a + b, sizeof(char));
+	if (!s3)
 		return (NULL);
 	a = -1;
 	b = -1;

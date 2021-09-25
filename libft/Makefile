@@ -6,7 +6,7 @@
 #    By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/09 11:49:23 by yjama             #+#    #+#              #
-#    Updated: 2021/08/28 20:02:21 by yjama            ###   ########.fr        #
+#    Updated: 2021/09/25 15:53:02 by yjama            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,6 @@ SRC =	ft_atoi.c\
 		ft_putstr_fd.c\
 		ft_putstr.c\
 		ft_split.c\
-		ft_split_upd.c\
 		ft_strchr.c\
 		ft_strdup.c\
 		ft_strjoin.c\

@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:47:33 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 12:56:00 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 15:05:27 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ft_double_quotes(char *str, char *s, int *i, t_base *b)
 		(*i)++;
 	if (str[*i] != '"')
 	{
-		global_error = 110;
+		g_error = 110;
 		return (NULL);
 	}
 	s1 = ft_substr(str, *j, (*i) - (*j));
@@ -81,7 +81,7 @@ char	*ft_single_quotes(char *str, char *s, int *i, t_base *b)
 		(*i)++;
 	if (str[*i] != '\'')
 	{
-		global_error = 111;
+		g_error = 111;
 		return (NULL);
 	}
 	s1 = ft_substr(str, j, (*i) - j);
@@ -123,13 +123,13 @@ char *ft_qmark(char *s, t_base *b)			// Добавлено
 	{
 		s1 = ft_strdup(s);
 		free(s);
-		s2 = ft_itoa(global_error);
+		s2 = ft_itoa(g_error);
 		s = ft_strjoin(s1, s2);
 		free(s1);
 		free(s2);
 	}
 	else
-		s = ft_itoa(global_error);
+		s = ft_itoa(g_error);
 	return (s);
 }
 

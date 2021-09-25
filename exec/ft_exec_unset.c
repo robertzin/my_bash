@@ -1,32 +1,47 @@
 #include "minishell.h"
 
-int	ft_unset_env(char *arg, t_base *main)
+void	ft_unset_env_norm(t_base *main, int flag)
 {
-	char *tmp;
-
-	tmp = ft_strjoin(arg, "=");
-	if (!tmp)
-		return (ft_print_error("malloc error", NULL, 121));
-	if (ft_strcmp(tmp, "PWD=") == 0)
+	if (flag == 0)
 	{
 		free(main->pwd);
 		main->pwd = NULL;
 	}
-	if (ft_strcmp(tmp, "OLDPWD=") == 0)
+	else if (flag == 1)
 	{
 		free(main->oldpwd);
 		main->oldpwd = NULL;
 	}
-	if (ft_strcmp(tmp, "HOME=") == 0)
+	else if (flag == 2)
 	{
 		free(main->home);
 		main->home = NULL;
 	}
-	if (ft_strcmp(tmp, "PATH=") == 0)
+	else if (flag == 3)
 	{
 		ft_doublearray_free(main->path);
 		main->path = NULL;
 	}
+}
+
+int	ft_unset_env(char *arg, t_base *main)
+{
+	char	*tmp;
+	int		flag;
+
+	flag = 0;
+	tmp = ft_strjoin(arg, "=");
+	if (!tmp)
+		return (ft_print_error("malloc error", NULL, 121));
+	if (ft_strcmp(tmp, "PWD=") == 0)
+		flag = 0;
+	if (ft_strcmp(tmp, "OLDPWD=") == 0)
+		flag = 1;
+	if (ft_strcmp(tmp, "HOME=") == 0)
+		flag = 2;
+	if (ft_strcmp(tmp, "PATH=") == 0)
+		flag = 3;
+	ft_unset_env_norm(main, flag);
 	free(tmp);
 	return (0);
 }

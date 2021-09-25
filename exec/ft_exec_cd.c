@@ -13,24 +13,15 @@ char	*ft_goto(t_base *main)
 		if (ft_strncmp(main->envc[i], "PWD=", 4) == 0)
 		{
 			if (!(getcwd(buf, PATH_MAX)))
-			{
-				ft_print_error("getcwd error", NULL, 1);
-				return (NULL);
-			}
+				return (ft_goto_norm(0));
 			oldpwd = main->envc[i];
 			main->envc[i] = ft_strjoin("PWD=", buf);
 			if (!main->envc[i])
-			{
-				ft_print_error("malloc error", NULL, 121);
-				return (NULL);
-			}
+				return (ft_goto_norm(1));
 			free(main->pwd);
 			main->pwd = ft_strdup(main->envc[i]);
 			if (!main->envc[i])
-			{
-				ft_print_error("malloc error", NULL, 121);
-				return (NULL);
-			}
+				return (ft_goto_norm(1));
 			return (oldpwd);
 		}
 	}

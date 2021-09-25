@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:00 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 12:56:17 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 15:05:27 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_filename(char *str, int *i, t_base *b)
 	if (!str[*i] || str[*i] == '\n' || str[*i] == '<' || str[*i] == '>' \
 			|| str[*i] == '|')
 	{
-		global_error = 120;
+		g_error = 120;
 		return (-1);
 	}
 	while (str[*i] != ' ' && str[*i] && str[*i] != '\n')
@@ -68,7 +68,7 @@ int	ft_delimiter(char *str, int *i, t_base *b)
 	if (!str[*i] || str[*i] == '\n' || str[*i] == '<' || str[*i] == '>' \
 		|| str[*i] == '|')
 	{
-		global_error = 121;
+		g_error = 121;
 		return (-1);
 	}
 	while (str[*i] != ' ' && str[*i] && str[*i] != '\n')
@@ -82,7 +82,7 @@ int	ft_delimiter(char *str, int *i, t_base *b)
 	e = ft_write_heredoc(b, j, k);
 	if (e < 0)
 	{
-		global_error = 122;										// нужно будет вывести ошибку. Т. к. это означает, что не удалось открыть файл для записи команд
+		g_error = 122;										// нужно будет вывести ошибку. Т. к. это означает, что не удалось открыть файл для записи команд
 		return (-1);
 	}
 	(*i)--;

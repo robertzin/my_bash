@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/28 20:01:26 by yjama             #+#    #+#             */
-/*   Updated: 2021/08/28 20:01:27 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 15:52:24 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	*ft_line_malloc(size_t count, size_t size)
 	unsigned char	*b;
 
 	a = (count * size);
-	if (!(b = malloc(a + 1)))
+	b = malloc(a + 1);
+	if (!b)
 		return (NULL);
 	b[a] = '\0';
 	return (b);

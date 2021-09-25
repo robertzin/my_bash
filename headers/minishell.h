@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:28:12 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 12:11:14 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 17:34:33 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,16 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "libft.h"
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-# include <dirent.h>
 # include <string.h>
-# include <time.h>
 # include <term.h>
 # include <ctype.h>
 # include <limits.h>
 # include <signal.h>
-#include <errno.h>
-
-int global_error;
+# include <errno.h>
+# include "libft.h"
 
 typedef struct s_redir
 {
@@ -69,6 +65,7 @@ typedef struct s_base
 	int		err_fl;
 }				t_base;
 
+int		g_error;
 void	ft_cleanarr(char **arr);
 char	**ft_addarr(char **arr, char *elem);
 char	**ft_envcpy(char **envp);
@@ -77,7 +74,7 @@ char	*ft_slash(char *str, char *s, int *i);
 char	*ft_getenv(char *s, char **envp);
 char	*ft_dollar(char *str, char *s, int *i, t_base *b);
 char	*ft_single_quotes(char *str, char *s, int *i, t_base *b);
-char	*ft_double_quotes(char *str, char *s, int *i, t_base  *b);
+char	*ft_double_quotes(char *str, char *s, int *i, t_base *b);
 t_redir	*ft_rdcpy(t_redir *src, t_redir *dst, int count);
 void	ft_init_redir(t_redir *rd);
 int		ft_memal_redir(t_base *b);
@@ -107,14 +104,20 @@ void	ft_exec_pwd(void);
 void	ft_exec_env(t_base *main);
 int		ft_exec_echo(t_cmd *cmd);
 void	ft_exec_exit(t_cmd *cmd);
+void	ft_ctrld_exit(void);
 int		ft_exec_cd(t_base *main, t_cmd *cmd);
 int		ft_exec_export(t_base *main, t_cmd *cmd);
 int		ft_exec_unset(t_base *main, t_cmd *cmd);
 
+char	*ft_goto_norm(int num);
+char	**ft_add_var(char **array, char *str);
+int		ft_is_valid(char *str, int one_word);
+void	ft_sorted_print(char **envc);
+
 void	ft_doublearray_print(char **array);
 char	**ft_doublearray_copy(char **array);
 void	ft_doublearray_free(char **array);
-int 	ft_unset_oldpwd(t_base *b);
+int		ft_unset_oldpwd(t_base *b);
 
 void	ft_clean_rdstr(t_redir *rd, int i);
 int		ft_start_exec(t_base *b);
@@ -137,16 +140,14 @@ int		ft_rev_rdir(t_base *b, int num, int i);
 int		ft_doub_rdir(t_base *b, int num, int i);
 int		ft_rdir(t_base *b, int num, int i);
 
-void	ignore_squit(int code);
 void	ignore_sint(int code);
 void	ignore_sint2(int code);
-void	ignore_squit2(int code);
 
 void	ft_exit_error(char *minishell, char *args, char *error_str);
 int		ft_print_error(char *str, char *cmd, int code);
 int		ft_ide_error(char *cmd, char *str);
 int		ft_cd_error(char *var, char *str);
 int		ft_execve_error(char *str);
-void 	rl_replace_line(const char *, int);
+void	rl_replace_line(const char *str, int num);
 
 #endif

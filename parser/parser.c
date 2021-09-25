@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:58 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 13:29:41 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 17:41:28 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,11 @@ int	ft_word(t_base *b, int *i)
 		{
 			k = ft_rd_pipe_pars(b, i);
 			if (k < 0)
-				ft_print_error("syntax error near unexpected token `newline'", NULL, 258);
+				return(ft_print_error("syntax error near unexpected token `newline'", NULL, 258));
 		}
 		else
 			s = ft_symbol(b->str_rl, s, i);
-		// if (global_error != 0)								// Всё таки вернула это условие, так как нужно вернуть -1. Из-за этого и зависало)
+		// if (g_error != 0)								// Всё таки вернула это условие, так как нужно вернуть -1. Из-за этого и зависало)
 		// 	return (-2);
 		(*i)++;
 	}
@@ -118,15 +118,14 @@ int	ft_parser(t_base *b)
 	*i = 0;
 	while (b->str_rl[*i] && b->str_rl[*i] != '\n')
 	{
-		k = ft_word(b, i);
-		if (k < 0)
+		if (ft_word(b, i) < 0)
 			return (-3);
 		while (b->str_rl[*i] == ' ')
 			(*i)++;
 	}
 	if (b->count_cmd <= b->count_f)
 	{
-		global_error = 130;
+		g_error = 130;
 		return (-4);
 	}
 	free(i);

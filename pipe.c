@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:49:56 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 13:16:45 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 15:05:51 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	ft_pipe(t_base *b)
 	while (i < b->count_cmd)
 	{
 		waitpid(0, &status, 0);
-		global_error = WEXITSTATUS(status);
+		g_error = WEXITSTATUS(status);
 		if (b->cmd[i].hdoc == 1)
 			unlink(".tmp");
 		i++;

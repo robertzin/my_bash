@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:43:09 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 13:39:15 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/25 16:21:51 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	ft_childproc(t_base *b, int num)
 	{
 		ft_print_error("command not found", *b->cmd[num].cmd, 127);
 		ft_cleanarr(pathname);
-		exit(global_error);
+		exit(g_error);
 	}
 	exit(k);
 }
@@ -104,10 +104,10 @@ int	ft_exec_cmd(t_base *b, int num)
 		return (-1);
 	else
 	{
-		signal(SIGQUIT, ignore_squit2);
+		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, ignore_sint2);
 		waitpid(id, &status, 0);
-		global_error = WEXITSTATUS(status);
+		g_error = WEXITSTATUS(status);
 		return (0);
 	}
 	return (0);

@@ -2,7 +2,7 @@
 
 int	ft_ide_error(char *cmd, char *str)
 {
-	global_error = 1;
+	g_error = 1;
 	write(2, "minishell: ", 11);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, ": `", 3);
@@ -15,7 +15,7 @@ int	ft_ide_error(char *cmd, char *str)
 
 void	ft_exit_error(char *minishell, char *args, char *error_str)
 {
-	global_error = 1;
+	g_error = 1;
 	if (minishell != NULL)
 		ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd("exit: ", 2);
@@ -27,10 +27,10 @@ void	ft_exit_error(char *minishell, char *args, char *error_str)
 
 int	ft_cd_error(char *var, char *str)
 {
-	char *err;
+	char	*err;
 
 	(void)var;
-	global_error = 1;
+	g_error = 1;
 	err = strerror(errno);
 	write(2, "minishell: ", 11);
 	write(2, "cd: ", 4);
@@ -49,7 +49,7 @@ int	ft_cd_error(char *var, char *str)
 
 int	ft_print_error(char *str, char *cmd, int code)
 {
-	global_error = code;
+	g_error = code;
 	write(2, "minishell: ", 11);
 	if (cmd != NULL)
 	{

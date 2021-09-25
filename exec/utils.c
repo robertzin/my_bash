@@ -1,57 +1,98 @@
 #include "minishell.h"
 
-char	**ft_doublearray_copy(char **array)
+char	**ft_add_var(char **array, char *str)
 {
 	int		i;
 	char	**new;
 
+	if (!str)
+		return (array);
 	i = 0;
-	if (!array)
-		return (NULL);
 	while (array[i] != NULL)
 		i++;
-	if (!(new = malloc(sizeof(char*) * (i + 1))))
-		return (NULL);
-	i = 0;
-	while (array[i] != NULL)
+	new = malloc(sizeof(char *) * (i + 2));
+	if (!new)
 	{
-		new[i] = ft_strdup(array[i]);
-		i++;
+		ft_print_error("malloc error", NULL, 121);
+		return (NULL);
 	}
-	new[i] = NULL;
+	i = -1;
+	if (array[0] != NULL)
+	{
+		while (array[++i] != NULL)
+			new[i] = ft_strdup(array[i]);
+	}
+	new[i] = ft_strdup(str);
+	new[++i] = NULL;
+	ft_doublearray_free(array);
 	return (new);
 }
 
-void	ft_doublearray_print(char **array)
+int	ft_is_valid(char *str, int one_word)
 {
-	int	i;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (1);
+	if (one_word == 1)
+	{
+		while (str[i] != '=' && str[i] != '\0')
+			i++;
+	}
+	else
+	{
+		while (str[i] != '=')
+			i++;
+	}
+	while (str[j] != '\0' && j != i)
+	{
+		if (!ft_isalnum(str[j]))
+			return (1);
+		j++;
+	}
+	return (0);
+}
+
+void	ft_sorted_print(char **envc)
+{
+	int		i;
+	int		j;
+	int		flag;
 
 	i = -1;
-	while (array[++i])
+	while (envc[++i] != 0)
 	{
-		ft_putstr_fd(array[i], 1);
+		j = -1;
+		flag = 0;
+		ft_putstr_fd("declare -x ", 1);
+		while (envc[i][++j] != '\0')
+		{
+			ft_putchar_fd(envc[i][j], 1);
+			if (envc[i][j] == '=' && flag == 0)
+			{
+				flag = 1;
+				ft_putchar_fd('"', 1);
+			}
+		}
+		if (flag == 1)
+			ft_putchar_fd('"', 1);
 		ft_putchar_fd('\n', 1);
 	}
 }
 
-void	ft_doublearray_free(char **array)
+char	*ft_goto_norm(int num)
 {
-	int		i;
-
-	i = 0;
-	if (array)
-	{
-		while (array[i] != NULL)
-		{
-			if (array[i])
-				free(array[i]);
-			i++;
-		}
-		free(array);
-	}
+	if (num == 0)
+		ft_print_error("getcwd error", NULL, 1);
+	else
+		ft_print_error("malloc error", NULL, 121);
+	return (NULL);
 }
 
-int ft_unset_oldpwd(t_base *b)
+int	ft_unset_oldpwd(t_base *b)
 {
 	t_cmd	cmd;
 

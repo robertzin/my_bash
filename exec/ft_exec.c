@@ -2,7 +2,7 @@
 
 void	ft_exec(t_base *b, int num)
 {
-	global_error = 0;
+	g_error = 0;
 	if (ft_strcmp(b->cmd[num].cmd[0], "echo") == 0)
 		ft_exec_echo(&b->cmd[num]);
 	else if (ft_strcmp(b->cmd[num].cmd[0], "pwd") == 0)

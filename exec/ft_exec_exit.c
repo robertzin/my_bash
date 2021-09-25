@@ -1,5 +1,17 @@
 #include "minishell.h"
 
+void	ft_ctrld_exit(void)
+{
+	int	i;
+
+	i = ft_strlen("minishell$> ");
+	ft_putstr_fd("\033[A", 1);
+	while (--i >= 0)
+		ft_putstr_fd("\033[C", 1);
+	ft_putendl_fd("exit", 1);
+	exit(0);
+}
+
 int	ft_check_arg(char *str)
 {
 	int		i;
