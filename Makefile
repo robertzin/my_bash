@@ -6,7 +6,7 @@
 #    By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/16 20:45:39 by oharmund          #+#    #+#              #
-#    Updated: 2021/09/25 18:13:24 by yjama            ###   ########.fr        #
+#    Updated: 2021/09/26 19:21:50 by yjama            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ SRCS		=	ft_main.c\
 				ft_signal.c\
 				./parser/ft_cmd_parse.c\
 				./parser/ft_parser_utils.c\
-				./parser/ft_quotes_dollar_symbol.c\
+				./parser/ft_quotes_symbol.c\
+				./parser/ft_dollar.c\
 				./parser/ft_rd_filename_delimiter.c\
 				./parser/ft_redir_parse.c\
 				./parser/ft_redir_utils.c\

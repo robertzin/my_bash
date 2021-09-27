@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executing_commands_utils.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:43:24 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/16 20:43:32 by oharmund         ###   ########.fr       */
+/*   Updated: 2021/09/26 17:13:23 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,17 @@ char	**ft_concat(char **arr, char *str)
 	return (arr_copy);
 }
 
-char	**ft_parse_path(t_base *b)
+char	**ft_parse_path(t_base *b, int num)
 {
 	char	*path;
 	char	**path_arr;
 
 	path = ft_getenv("PATH", b->envc);
+	if (path[0] == '\0')
+	{
+		ft_print_error("No such file or directory", *b->cmd[num].cmd, 127);
+		exit(g_error);
+	}
 	path_arr = ft_split(path, ':');
 	path_arr = ft_concat(path_arr, "/");
 	return (path_arr);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oharmund <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:48:47 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/16 20:48:49 by oharmund         ###   ########.fr       */
+/*   Updated: 2021/09/26 16:45:50 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,11 @@ int	ft_memal_redir(t_base *b)
 	i = b->cmd[b->count_cmd - 1].count - 1;
 	ft_init_redir(&b->cmd[b->count_cmd - 1].rd[i]);
 	return (0);
+}
+
+void	ft_word_norm(t_base *b, char *s)
+{
+	if (s)
+		b->cmd[b->count_cmd - 1].cmd = \
+			ft_addarr(b->cmd[b->count_cmd - 1].cmd, s);
 }

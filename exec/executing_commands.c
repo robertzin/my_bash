@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:43:09 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 16:21:51 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/26 19:02:24 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**ft_arr_path_cmd(t_base *b, int num)
 	char	**path_arr;
 
 	path_arr = NULL;
-	path_arr = ft_parse_path(b);
+	path_arr = ft_parse_path(b, num);
 	path_arr = ft_concat(path_arr, b->cmd[num].cmd[0]);
 	return (path_arr);
 }

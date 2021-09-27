@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:28:12 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 18:29:44 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/26 17:13:34 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*ft_symbol(char *str, char *s, int *i);
 char	*ft_slash(char *str, char *s, int *i);
 char	*ft_getenv(char *s, char **envp);
 char	*ft_dollar(char *str, char *s, int *i, t_base *b);
-char	*ft_single_quotes(char *str, char *s, int *i, t_base *b);
+char	*ft_single_quotes(char *str, char *s, int *i);
 char	*ft_double_quotes(char *str, char *s, int *i, t_base *b);
 t_redir	*ft_rdcpy(t_redir *src, t_redir *dst, int count);
 void	ft_init_redir(t_redir *rd);
@@ -91,7 +91,7 @@ int		ft_parser(t_base *b);
 int		parser_env(t_base *main);
 void	ft_init(t_base *b);
 char	**ft_concat(char **arr, char *str);
-char	**ft_parse_path(t_base *b);
+char	**ft_parse_path(t_base *b, int num);
 char	**ft_arr_path_cmd(t_base *b, int num);
 char	**ft_path_cmd(t_base *b, int num);
 int		ft_exec_cmd(t_base *b, int num);
@@ -123,6 +123,8 @@ char	**ft_unset_arg_done_norm(t_base *main, int pos, int *j, int *k);
 int		ft_export_var_norm(t_base *main, t_cmd *cmd, int one_word, int i);
 int		ft_change_var(t_base *main, char *var);
 int		ft_check_one_word(t_base *main, char *var);
+int		ft_change_var_norm(char *var, char **search, int len);
+int		ft_change_var_norm_done(t_base *main, char *var, char **search, int i);
 
 void	ft_clean_rdstr(t_redir *rd, int i);
 int		ft_start_exec(t_base *b);
@@ -154,5 +156,6 @@ int		ft_ide_error(char *cmd, char *str);
 int		ft_cd_error(char *var, char *str);
 int		ft_execve_error(char *str);
 void	rl_replace_line(const char *str, int num);
+void	ft_word_norm(t_base *b, char *s);
 
 #endif

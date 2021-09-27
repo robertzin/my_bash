@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:47:19 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 17:34:39 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/26 17:08:25 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_cleanarr(char **arr)
 
 	i = 0;
 	if (!arr)
-		return;
+		return ;
 	while (arr[i])
 	{
 		if (arr[i])
@@ -94,7 +94,6 @@ void	ft_free_struct(t_base *b)
 
 void	ft_init(t_base *b)
 {
-	// ft_bzero(b, sizeof(t_base));
 	b->count_cmd = 1;
 	b->count_f = 0;
 	b->exit = 0;

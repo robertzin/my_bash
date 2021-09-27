@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_norm.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/26 11:50:34 by yjama             #+#    #+#             */
+/*   Updated: 2021/09/26 12:01:13 by yjama            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_unset_env_norm(t_base *main, int flag)
@@ -22,6 +34,42 @@ void	ft_unset_env_norm(t_base *main, int flag)
 		ft_doublearray_free(main->path);
 		main->path = NULL;
 	}
+}
+
+int	ft_change_var_norm(char *var, char **search, int len)
+{
+	*search = ft_strchr(var, '=');
+	if (!*search)
+		return (-1);
+	while (var[len] != '=')
+		len++;
+	*search = ft_substr(var, 0, len);
+	if (!search)
+	{
+		ft_print_error("malloc error", NULL, 121);
+		return (-1);
+	}
+	return (0);
+}
+
+int	ft_change_var_norm_done(t_base *main, char *var, char **search, int i)
+{
+	int		j;
+
+	j = 0;
+	while (main->envc[i][j] != '=' && main->envc[i][j] != '\0')
+		j++;
+	if ((ft_strncmp(main->envc[i], *search, j) == 0)
+		&& (ft_strncmp(main->envc[i], *search, ft_strlen(*search)) == 0))
+	{
+		free(*search);
+		free(main->envc[i]);
+		main->envc[i] = ft_strdup(var);
+		if (!main->envc[i])
+			return (ft_print_error("malloc error", NULL, 121));
+		return (1);
+	}
+	return (0);
 }
 
 int	ft_export_var_norm(t_base *main, t_cmd *cmd, int one_word, int i)

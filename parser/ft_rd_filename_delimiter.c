@@ -21,7 +21,7 @@ void	ft_filename_part(char *str, int *i, t_base *b)
 	k = b->cmd[j].count - 1;
 	if (str[*i] == '\'')
 		b->cmd[j].rd[k].filename = ft_single_quotes(str, \
-			b->cmd[j].rd[k].filename, i, b);
+			b->cmd[j].rd[k].filename, i);
 	else if (str[*i] == '"')
 		b->cmd[j].rd[k].filename = ft_double_quotes(str, \
 			b->cmd[j].rd[k].filename, i, b);
@@ -57,32 +57,26 @@ int	ft_filename(char *str, int *i, t_base *b)
 int	ft_delimiter(char *str, int *i, t_base *b)
 {
 	int	j;
-	int	k;
-	int e;
 
-	e = 0;
 	j = b->count_cmd - 1;
-	k = b->cmd[j].count - 1;
 	while (str[*i] == ' ')
 		(*i)++;
-	if (!str[*i] || str[*i] == '\n' || str[*i] == '<' || str[*i] == '>' \
-		|| str[*i] == '|')
+	if (!str[*i] || str[*i] == '<' || str[*i] == '>' || str[*i] == '|')
 	{
 		g_error = 121;
 		return (-1);
 	}
 	while (str[*i] != ' ' && str[*i] && str[*i] != '\n')
 	{
-		b->cmd[j].rd[k].delimiter = ft_symbol(str, \
-					b->cmd[j].rd[k].delimiter, i);
+		b->cmd[j].rd[b->cmd[j].count - 1].delimiter = ft_symbol(str, \
+					b->cmd[j].rd[b->cmd[j].count - 1].delimiter, i);
 		(*i)++;
 	}
-	if (!b->cmd[j].rd[k].delimiter)
+	if (!b->cmd[j].rd[b->cmd[j].count - 1].delimiter)
 		return (-1);
-	e = ft_write_heredoc(b, j, k);
-	if (e < 0)
+	if (ft_write_heredoc(b, j, b->cmd[j].count - 1) < 0)
 	{
-		g_error = 122;										// нужно будет вывести ошибку. Т. к. это означает, что не удалось открыть файл для записи команд
+		g_error = 122;
 		return (-1);
 	}
 	(*i)--;

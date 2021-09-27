@@ -6,7 +6,7 @@
 /*   By: yjama <yjama@student.21-school.ru>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 20:46:43 by oharmund          #+#    #+#             */
-/*   Updated: 2021/09/25 17:47:57 by yjama            ###   ########.fr       */
+/*   Updated: 2021/09/26 18:43:30 by yjama            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ft_clean_cmd(t_cmd *cmd, int count)
 			ft_clean_rdstr(cmd[i].rd, cmd[i].count);
 		i++;
 	}
+	if (cmd)
+		free(cmd);
 }
 
 t_cmd	*ft_cmdcpy(t_cmd *src, t_cmd *dst, int count)
@@ -86,7 +88,10 @@ int	ft_memal_cmd(t_base *b)
 		return (-1);
 	c = ft_cmdcpy(b->cmd, c, b->count_cmd);
 	if (!c)
+	{
+		ft_clean_cmd(c, b->count_cmd);
 		return (-1);
+	}
 	ft_clean_cmd(b->cmd, b->count_cmd);
 	b->count_cmd++;
 	b->cmd = (t_cmd *)malloc(sizeof(t_cmd) * (b->count_cmd));
@@ -96,9 +101,9 @@ int	ft_memal_cmd(t_base *b)
 		return (-1);
 	}
 	b->cmd = ft_cmdcpy(c, b->cmd, b->count_cmd - 1);
+	ft_clean_cmd(c, b->count_cmd - 1);
 	if (!b->cmd)
 		return (-1);
-	ft_clean_cmd(c, b->count_cmd - 1);
 	k = ft_init_cmd(b);
 	return (k);
 }
