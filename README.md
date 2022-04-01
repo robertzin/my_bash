@@ -1,6 +1,6 @@
-Цель проекта - написать свою версию оболочки bash.
-Особенности проекта:
-- реализация пайпов и редиректов, в т.ч. множественных;
-- написание команд builtin (pwd, env, cd, echo, export, unset);
-- улавливание сигналов (игнорирование сигнала Ctrl+\\, пустая строка на Ctrl+C, выход из программы при Ctrl+D;
-- обработка ошибок и возврат корректного номера ошибки через команду $?
+The goal of the project is to implement the bash shell. Project Features:
+
+- pipes and redirects, incl. multiple;
+- builtin commands (pwd, env, cd, echo, export, unset);
+- signals (ignoring the signal Ctrl + \, an empty line on Ctrl + C, exiting the program with Ctrl + D);
+- error handling and returning the correct error number via the $?
